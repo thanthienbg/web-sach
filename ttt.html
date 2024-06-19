@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Reader</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      background-color: #343a40;
+      color: #ffffff;
+    }
+    
+    .reader {
+      padding: 20px;
+      background-color: #ffffff;
+      color: #000;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      margin: 0 0 0 0 ;
+    }
+    .reader::-webkit-scrollbar {
+      width: 8px;
+    }
+    .reader::-webkit-scrollbar-thumb {
+      background-color: #6c757d;
+      border-radius: 10px;
+    }
+    .reader::-webkit-scrollbar-track {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+    }
+    .controls {
+      padding: 15px;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 280px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      z-index: 1000;
+    }
+    .hidden {
+      display: none;
+    }
+    .form-group label {
+      font-weight: bold;
+    }
+    .btn-top, .btn-bottom {
+      margin-top: 10px;
+    }
+    .btn-close {
+      float: right;
+      font-size: 20px;
+      background: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <div class="controls hidden" id="settingsPanel">
+    <button id="closeSettingsBtn" class="btn-close">&times;</button>
+    <h5 class="text-center mb-3">Settings</h5>
+    <div class="form-group">
+      <label for="textColor">Text Color:</label>
+      <select id="textColor" class="form-control">
+        <option value="#000000">Black</option>
+        <option value="#ffffff">White</option>
+        <option value="#ff0000">Red</option>
+        <option value="#00ff00">Green</option>
+        <option value="#0000ff">Blue</option>
+        <option value="#ffff00">Yellow</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bgColor">Background Color:</label>
+      <select id="bgColor" class="form-control">
+        <option value="#343a40">Dark Gray</option>
+        <option value="#000000">Black</option>
+        <option value="#1b1b1b">Darker Gray</option>
+        <option value="#ffffff">White</option>
+        <option value="#282828">Almost Black</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="fontSize">Font Size:</label>
+      <input type="range" id="fontSize" class="form-control" min="10" max="36" value="16">
+      <span id="fontSizeValue">16px</span>
+    </div>
+    <div class="form-group">
+      <label for="fontFamily">Font Style:</label>
+      <select id="fontFamily" class="form-control">
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Georgia, serif">Georgia</option>
+        <option value="Times New Roman, serif">Times New Roman</option>
+        <option value="Courier New, monospace">Courier New</option>
+      </select>
+    </div>
+    <div class="text-center">
+      <button id="fullscreenBtn" class="btn btn-success mb-2">Full Screen</button>
+      <button id="topBtn" class="btn btn-info mb-2 btn-top">Go to Top</button>
+      <button id="bottomBtn" class="btn btn-info mb-2 btn-bottom">Go to Bottom</button>
+    </div>
+  </div>
+  <!--  container-->
+  <div class="d-flex    ">
+    <div style="width: 5%; color: aqua;"></div>
+<div style="width: 90%;">
+  <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Always expand</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample02">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+        </ul>
+        <form class="d-flex justify-content-end">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="reader" id="reader">
+   
+    <div class="d-flex justify-content-end">
+      <button id="toggleSettingsBtn" class=" d-flex btn btn-primary mb-3 " style=" position: fixed;">
+        <i class="fas fa-align-justify" id="settings-toggle"></i>
+      </button>
+    </div>
+    
+    <!-- Content goes here -->
+    
+    <h1 class="text-center">LỜI GIỚI THIỆU</h1>
+    <p>Ngày nọ, một đàn ếch đi ngang qua một khu rừng và hai con ếch bị rơi xuống một cái hố. Thấy cái hố quá sâu, những con ếch còn lại bèn nói với hai con ếch tội nghiệp kia rằng chúng sẽ phải chết. </p>
+    <p>Mặc kệ những lời bình luận, hai con ếch cố hết sức nhảy ra khỏi cái hố. Đám ếch ở bên trên nhao nhao bảo chúng đừng hành động vô ích, hãy chấp nhận cái chết không thể tránh khỏi.</p>
+    <p>Thế là một con ếch nghe theo lời của đàn, nó gục xuống chết vì kiệt sức và tuyệt vọng. Trong khi đó con ếch còn lại vẫn dồn hết sức lực cuối cùng tiếp tục nhảy lên. Cả đám ếch càng ầm ĩ la lên bảo nó hãy nằm yên mà chờ chết thì nó lại càng nhảy mạnh hơn nữa. Thật kỳ diệu, cuối cùng nó cũng thoát ra khỏi cái hố sâu.</p>
+    <p>Thấy vậy, đàn ếch xúm xít lại hỏi: “Cậu không nghe chúng tôi nói gì à?".</p>
+    <p>Chúng cứ lao nhao hỏi mãi trước sự ngạc nhiên, lúng túng của con ếch nọ.</p>
+    <p>Cuối cùng sự thật cũng được một con ếch già hé lộ, rằng con ếch vừa thoát khỏi cái hố kia bị điếc và nó cứ nghĩ là những con ếch khác đang hò reo cổ vũ cho mình. Chính ý nghĩ đó đã tiếp thêm sức mạnh diệu kỳ giúp con ếch đáng thương níu giữ được sợi dây sự sống mong manh trong khoảnh khắc cận kề cái chết.</p>
+    <p>Quả thật, chẳng ai muốn mình giống như con ếch "xấu số" chấp nhận buông xuôi trước nghịch cảnh kia, lại càng không muốn để cho sự may mắn tình cờ quyết định thay số phận cuộc đời mình. Chúng ta luôn muốn được tự lèo lái con thuyền đời bằng cách giữ vững "bánh lái - thái độ tích cực", căng rộng "cánh buồm - tâm trí" đón những "cơn gió - suy nghĩ" mới để đẩy thuyền hướng đến "vùng đất hứa - mục đích" đã đề ra. Tuy nhiên, đằng sau thái độ, hành vi của mỗi chúng ta là cả một "bản đồ thế giới" (map of the world) - chứa đựng những thói quen, niềm tin, giá trị, ký ức,... định hình nên suy nghĩ, hành động, cách ta nhìn nhận về bản thân, về mọi người và về thế giới xung quanh.</p>
+    <p>John Grinder và Richard Bandler, hai giáo sư thuộc trường Đại học Santa Cruz (Mỹ), đã sáng lập ra liệu pháp NLP (Neuro Linguistic Programming - Lập trình Ngôn ngữ Tư duy) giúp thay đổi tận gốc hành vi, tức là thay đổi kiểu suy nghĩ dẫn đến hành vi của mỗi người. Vì đặc điểm nổi bật này mà NLP phát huy tác dụng rất hiệu quả trong việc thay đổi một con người. Không giống như các phương pháp truyền thống khác, chỉ đơn thuần bảo ta cần phải làm gì, NLP hướng dẫn ta cách làm đề đạt được mục tiêu đề ra, đề trở thành mẫu người mà mình mong muốn.</p>
+    <p>NLP cũng chính là bí quyết làm nên danh tiếng của Anthony Robbins (một trong những diễn giả hàng đầu thế giới hiện nay), "Nữ hoàng Truyền hình" Oprah Winfrey, cựu Tổng thống Mỹ Bill Clinton và nhiều nhân vật tên tuổi khác.</p>
+    <p>Hiện nay, NLP được ứng dụng rất rộng rãi trong nhiều lĩnh vực như: quản lý, huấn luyện, bán hàng, tâm lý học, thể thao, y tế, thương thuyết, diễn thuyết, nuôi dạy con cái và nhiều lĩnh vực khác.</p>
+    <img src="NLP_files/image003.jpg">
+    <p>Với mong muốn được đóng góp cho thành công của bạn, First News hân hạnh giới thiệu quyển sách Khám phá ngôn ngữ tư duy của tác giả Philip Miller. Khác với nhiều sách vở, bài viết về NLP vốn sử dụng quá nhiều thuật ngữ chuyên môn - thử nghĩ đến tên gọi Lập trình Ngôn ngữ Tư duy mà xem! - quyển sách bạn đang cầm trên tay là tâm huyết, là sự nỗ lực bền bỉ của tác giả nhằm chia sẻ với mọi người lợi ích thiết thực của NLP trong công việc, trong cách đối nhân xử thế, khám phá bản thân và trải nghiệm cuộc sống. Đây là quyền sách hay, sử dụng ngôn ngữ đơn giản với nhiều hình minh họa sinh động, vui nhộn về NLP. Hy vọng bạn sẽ gặt hái thêm nhiều thành công và trải nghiệm sống tốt đẹp từ những công cụ hữu ích, thiết thực với "bộ công cụ NLP"!</p>
+    <p>- First News</p>
+  </div>
+</div>
+  <div style="width: 5%; color: aqua;"></div>
+  <!--end container-->
+</div>
+  <script>
+    document.getElementById('textColor').addEventListener('change', function() {
+      document.getElementById('reader').style.color = this.value;
+    });
+
+    document.getElementById('bgColor').addEventListener('change', function() {
+      document.getElementById('reader').style.backgroundColor = this.value;
+    });
+
+    document.getElementById('fontSize').addEventListener('input', function() {
+      document.getElementById('reader').style.fontSize = this.value + 'px';
+    });
+
+    document.getElementById('fontFamily').addEventListener('change', function() {
+      document.getElementById('reader').style.fontFamily = this.value;
+    });
+
+    document.getElementById('fullscreenBtn').addEventListener('click', function() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    document.getElementById('topBtn').addEventListener('click', function() {
+      document.getElementById('reader').scrollTop = 0;
+    });
+
+    document.getElementById('bottomBtn').addEventListener('click', function() {
+      var reader = document.getElementById('reader');
+      reader.scrollTop = reader.scrollHeight;
+    });
+
+    document.getElementById('toggleSettingsBtn').addEventListener('click', function() {
+      var settingsPanel = document.getElementById('settingsPanel');
+      settingsPanel.classList.toggle('hidden');
+    });
+
+    document.getElementById('closeSettingsBtn').addEventListener('click', function() {
+      document.getElementById('settingsPanel').classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
