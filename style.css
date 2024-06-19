@@ -1,0 +1,17 @@
+.reading-area {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 1.6;
+  height: 400px; /* Increased height */
+  overflow-y: auto; 
+}
+
+.settings-panel {
+  margin-top: 20px;
+}
+
+.settings-panel .form-group {
+  margin-bottom: 15px;
+}
